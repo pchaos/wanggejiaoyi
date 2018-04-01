@@ -1,0 +1,38 @@
+作者：久久为功
+2018年2月3日
+
+本框架需要的交易接口是puppet，作者是睿瞳深邃。
+本框架很简单，就是不断从一个交易信号数据库中取信号并用puppet交易接口不断执行。
+所以你首先要有自己的策略并把策略生成的信号放到数据库中。
+用数据库隔离了策略和策略的执行，这样的好处是你换交易接口并不需要动策略，你修改策略也不需要管策略的执行部分。
+当然还有其他方法可以隔离策略和策略的执行，比如说RPC。这方面大家也可以交流。
+
+特别注意：
+修改puppet_v4.py中函数market_value第237行，
+修改前return sum((float(pair['市值']) for pair in ret)) if ret else ret
+修改后return sum((float(pair['市值']) for pair in ret)) if ret else 0.0
+ret是position，如果为空的话那么意味着没有，持仓，没有持仓市值就是0.0
+而不是空的position（puppet中position的类型是tuple）。
+已经告诉作者了，如果你拿到的版本是更新过的，那么就恭喜你了。
+
+
+交易框架运行需要三个py文件，两个json文件，还有一个交易信号数据库文件
+三个py文件分别为letspuppetTrade.py，floatdataframe.py和LogAll.py
+两个json文件分别是accounts.json和waiver.json
+letspuppetTrade.py就是主程序，执行方法就是python letspuppetTrade.py
+floatdataframe.py提供了函数把DataFrame中的特定列变成float类型，具体可看源码
+LogAll.py提供了日志功能，便于盘后分析交易过程。
+accounts.json，可以有很多个账户，其中a1，a2是账户的名字，这个为了兼容其他交易接口设计比较复杂，不需要的话可以修改。
+waiver.json，为了避免自动交易造成大的亏损，所以这个系统只了结赚钱的订单，当然不喜欢这点的可以修改。放在waiver中的品种就不论盈亏都可以出掉。
+注意：
+本交易默认的策略数据库是r'C:\Project\letstrade\trial_%s.db' %today，日期格式为20180202
+为了兼容其他交易接口，本程序中有些冗余代码，请理解。
+
+
+
+
+
+
+
+
+
