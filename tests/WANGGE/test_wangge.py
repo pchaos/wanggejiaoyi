@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 -------------------------------------------------
-@File    : test_doCaculate.py
+@File    : test_wangge.py
 Description :
 @Author :       pchaos
 date：          18-4-1
@@ -17,7 +17,7 @@ from WANGGE.wangge import *
 __author__ = 'pchaos'
 
 
-class TestDoCaculate(TestCase):
+class TestWangge(TestCase):
     def setUp(self):
         self.high = 100.0
         self.low = 0.0
