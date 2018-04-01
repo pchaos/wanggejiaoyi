@@ -8,15 +8,11 @@ Support multil-thread for different accounts
 import datetime
 import pandas as pd
 import sqlite3
-import time
-from LogAll import LogAll
+from letspuppet import LogAll, floatdataframe
 import logging
 import traceback
 import json
 import threading
-import os
-import sys
-import floatdataframe
 import tushare as ts
 from puppet.puppet_v4 import *
 
@@ -108,7 +104,7 @@ class alphatrade(threading.Thread):
         p=pd.DataFrame(list(p))
         if p.shape[0]>0:
             p.rename(columns={'买入均价':'buy_price', '可用余额':'quant_sellable', '股票余额':'quant','证券代码':'stock_id'}, inplace = True)
-            p=floatdataframe.floatdataframe(p,['quant','quant_sellable','buy_price'])
+            p= floatdataframe.floatdataframe(p, ['quant', 'quant_sellable', 'buy_price'])
             p.index=p['stock_id']
             p=p[p.quant>0]
             if '' in list(p.columns):
@@ -122,7 +118,7 @@ class alphatrade(threading.Thread):
         notpending=['已成','已撤','废单']
         if e.shape[0]>0:
             e.rename(columns={'委托价格':'price', '操作':'operation', '证券代码':'sid', '合同编号':'order_id'}, inplace = True)
-            e=floatdataframe.floatdataframe(e,['price'])
+            e= floatdataframe.floatdataframe(e, ['price'])
             e.index=e['sid']
             e=e[~e['备注'].isin(notpending)] 
             for i in range(e.shape[0]):
