@@ -219,10 +219,10 @@ class Puppet:
         op.PostMessageW(self.two_way, MSG['WM_COMMAND'], TWO_WAY['刷新'], 0)
 
     def cancel(self, symbol=None, choice='buy'):
-        print("请尽快将"buy"改成"cancel_buy", "sell"改成"cancel_sell"，并移植到cancel_order方法。")
+        # print("请尽快将"buy"改成"cancel_buy", "sell"改成"cancel_sell"，并移植到cancel_order方法。")
         time.sleep(3)
         cases = {'buy': 'cancel_buy', 'sell': 'cancel_sell'}
-        cancel_order(cases.get(choice))
+        self.cancel_order(cases.get(choice))
     
     def cancel_order(self, symbol=None, choice='cancel_all', symbolid=3348, nMarket=None, orderId=None):
         """撤销订单，choice选择操作的结果，默认“cancel_all”，可选“cancel_buy”、“cancel_sell”或"cancel"
