@@ -50,6 +50,11 @@ def getlimit(code,aname):
             return 10000
             
 def getyesterdayc(c):
+    """
+    获取昨日收盘价
+    :param c: 股票代码
+    :return:
+    """
     try:
         today=datetime.datetime.now().strftime('%Y-%m-%d')
         df=ts.get_k_data(c,autype=None,index=False)
@@ -92,14 +97,21 @@ class alphatrade(threading.Thread):
         
     def getbalance(self):
         '''
+        总金额=可用余额 + 市值
         '''
+        # 可用余额
         b=self.puppetTrade.balance
+        # 市值
         s=self.puppetTrade.market_value
         self.balance=float(b)
         self.assets=float(b)+float(s)
         
         
     def getposition(self):
+        """
+        '委托价格':'price', '操作':'operation', '证券代码':'sid', '合同编号':'order_id'
+        :return:
+        """
         p=self.puppetTrade.position
         p=pd.DataFrame(list(p))
         if p.shape[0]>0:
@@ -191,6 +203,7 @@ class alphatrade(threading.Thread):
         noonEnd=datetime.time(13,2,0,0)
         now=datetime.datetime.now().time()
         today=gettoday()
+        # todo 交易日判断，加上上证指数判断，可以判断节假日
         if not (now<=marketEnd and getweekday()<5):
             print('logout 1 done')
             self.logout()
@@ -336,6 +349,3 @@ def main():
             
 if __name__=='__main__': 
     main()
-
-
-
