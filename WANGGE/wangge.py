@@ -100,14 +100,15 @@ class wangGebase():
         jianju = (self._high - self._low) / (self._n - 1)
         #  居中价格
         jz = np.round((self._high + self._low) / 2, 4)
-        print("居中价格：{0}, 网格顶价格：{1}, 网格底部价格：{2}".format(jz, self._high, self._low))
+        print("居中价格：{0}, 网格顶价格：{1}, 网格底部价格：{2}, 网格数量：{3}".format(jz, self._high, self._low, self._n - 1))
         for i in range(0, self._n):
             # 按顺序为： 序号	当时价格	网格	仓位%	估值动率%
             self._wangge[i][0] = i
-            self._wangge[i][1] = np.round(jz + jianju * ((self._n -1)/2-i), 4)
+            self._wangge[i][1] = np.round(jz + jianju * ((self._n - 1) / 2 - i), 4)
             self._wangge[i][2] = jianju
             self._wangge[i][3] = 100 * i / (self._n - 1)
             self._wangge[i][4] = np.round((self._wangge[i][1] - jz) * 100 / jz, 2)
+
 
 class simpleWange(wangGebase):
     pass
