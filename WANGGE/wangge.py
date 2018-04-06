@@ -94,7 +94,8 @@ class wangGebase():
         """
         # 列数量
         j = 5
-        dt = np.dtype([('序号', np.int8), ('当时价格', np.float), ('网格间距', np.float), ('仓位%', np.float), ('估值动率%', np.float)])
+        dt = np.dtype([('序号', np.int8), ('当时价格', np.float), ('网格间距', np.float), ('仓位%', np.float),
+                       ('估值动率%', np.float)])
         self._wangge = np.zeros((self._n), dtype=dt)
         # 网格间距
         jianju = (self._high - self._low) / (self._n - 1)
