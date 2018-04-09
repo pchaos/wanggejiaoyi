@@ -16,6 +16,7 @@ __author__ = 'pchaos'
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from wangges.models import Stockcode
+from wangges.models import ZXG
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -31,4 +32,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class StockcodeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Stockcode
+        fields = ('code', 'name', 'market', 'isindex')
+
+class ZXGSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ZXG
         fields = ('code', 'name', 'market', 'isindex')

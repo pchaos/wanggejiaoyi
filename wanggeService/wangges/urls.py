@@ -22,8 +22,10 @@ from . import views
 app_name="wangges"
 
 urlpatterns = [
-    url(r'^$', views.stockcode_list, name='stockcodeList'),
-    url(r'^(?P<pk>[0-9]+)$', views.stockcode_detail, name='stockcodeDetail'),
+    url(r'^wangges/stocks/$', views.stockcode_list, name='stockcodeList'),
+    url(r'^wangges/stocks/(?P<pk>[0-9]+)$', views.stockcode_detail, name='stockcodeDetail'),
+    url(r'^ZXG/$', views.ZXG_list, name='ZXGList'),
+    url(r'^ZXG/(?P<pk>[0-9]+)$', views.ZXG_detail, name='ZXGDetail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
