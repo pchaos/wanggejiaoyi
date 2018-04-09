@@ -28,7 +28,7 @@ class TestWangge(TestCase):
     def tearDown(self):
         self.wg = None
 
-    def test_doCaculate(self):
+    def test_doCaculateSimpleWangge(self):
         wangge = self.wg()
         print(wangge)
         self.assertTrue(wangge[-1][1] == self.low, "caculate fault: {0} != {1}".format(wangge[-1][1], self.low))
@@ -46,3 +46,37 @@ class TestWangge(TestCase):
         print(wangge)
         self.assertTrue(wangge[-1][1] == self.low, "caculate fault: {0} != {1}".format(wangge[-1][1], self.low))
         self.assertTrue(wangge[0][1] == self.high, "caculate fault: {0} != {1}".format(wangge[0][1], self.high))
+
+    def test_doCaculateIndexWangge(self):
+        """
+        价格等比变化
+        :return:
+        """
+        self.high = 20.0
+        self.low = 10.0
+        self.n = 20  # 网格为20格
+        # self.wg = wangGebase(self.high, self.low, self.n)
+        self.wg = IndexWangge(self.high, self.low, self.n)
+        wangge = self.wg()
+        print(wangge)
+        self.assertTrue(wangge[-1][1] == self.low, "caculate low fault: {0} != {1}".format(wangge[-1][1], self.low))
+        self.assertTrue(wangge[0][1] == self.high, "caculate high fault: {0} != {1}".format(wangge[0][1], self.high))
+        self.high = 200
+        self.low = 144
+        self.n = 13  # 网格为30格
+        # self.wg = wangGebase(self.high, self.low, self.n)
+        self.wg = IndexWangge(self.high, self.low, self.n)
+        wangge = self.wg()
+        print(wangge)
+        self.assertTrue(wangge[-1][1] == self.low, "caculate low fault: {0} != {1}".format(wangge[-1][1], self.low))
+        self.assertTrue(wangge[0][1] == self.high, "caculate high fault: {0} != {1}".format(wangge[0][1], self.high))
+
+        self.high = 1.323
+        self.low = 0.414
+        self.n = 40  # 网格为40格
+        # self.wg = wangGebase(self.high, self.low, self.n)
+        self.wg = IndexWangge(self.high, self.low, self.n)
+        wangge = self.wg()
+        print(wangge)
+        self.assertTrue(wangge[-1][1] == self.low, "caculate low fault: {0} != {1}".format(wangge[-1][1], self.low))
+        self.assertTrue(wangge[0][1] == self.high, "caculate high fault: {0} != {1}".format(wangge[0][1], self.high))

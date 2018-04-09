@@ -92,8 +92,6 @@ class wangGebase():
         需要改变间隔的，子类中重写间隔逻辑
         :return: 无
         """
-        # 列数量
-        j = 5
         dt = np.dtype([('序号', np.int8), ('当时价格', np.float), ('网格间距', np.float), ('仓位%', np.float),
                        ('估值动率%', np.float)])
         self._wangge = np.zeros((self._n), dtype=dt)
@@ -113,3 +111,30 @@ class wangGebase():
 
 class simpleWange(wangGebase):
     pass
+
+
+class IndexWangge(wangGebase):
+    """
+    指数网格
+    """
+
+    def doCaculate(self):
+        """
+        计算等比间隔
+        :return:
+        """
+        dt = np.dtype([('序号', np.int8), ('当时价格', np.float), ('网格间距', np.float), ('仓位%', np.float),
+                       ('估值动率%', np.float)])
+        self._wangge = np.zeros((self._n), dtype=dt)
+        # 网格间距 等比间隔
+        jianju = 10 ** (np.log10(self._high / self._low) / (self._n - 1))
+        #  居中价格
+        jz = np.round((self._high + self._low) / 2, 4)
+        print("居中价格：{0}, 网格顶价格：{1}, 网格底部价格：{2}, 网格数量：{3}".format(jz, self._high, self._low, self._n - 1))
+        for i in range(0, self._n):
+            # 按顺序为： 序号	当时价格	网格	仓位%	估值动率%
+            self._wangge[i][0] = i
+            self._wangge[i][1] = np.round(self._low * jianju ** ((self._n - i - 1)), 4)
+            self._wangge[i][2] = self._wangge[i][1] * (jianju - 1)
+            self._wangge[i][3] = 100 * i / (self._n - 1)
+            self._wangge[i][4] = np.round((self._wangge[i][1] - jz) * 100 / jz, 2)
