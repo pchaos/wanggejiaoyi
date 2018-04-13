@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
 """
 -------------------------------------------------
-@File：     __init__
+
+@File    : __init__.py.py
+
 Description :
+
 @Author :       pchaos
-@Time：          2018-4-1
+
+date：          2018-4-10
 -------------------------------------------------
 Change Activity:
-               18-4-1:
+               18-4-10:
 @Contact : p19992003#gmail.com                   
 -------------------------------------------------
 """
 __author__ = 'pchaos'
-__version__ = '0.01'
 
-def version():
-    return 'version:{0}'.format(__version__)
+from . import untils
+from . import tools

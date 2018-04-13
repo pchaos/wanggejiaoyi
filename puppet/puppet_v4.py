@@ -72,8 +72,11 @@ VKCODE = {'F1': 112,
           'F4': 115,
           'F5': 116,
           'F6': 117}
+import platform
 
-op = ctypes.windll.user32
+sysstr = platform.system()
+if (sysstr == "Windows"):
+    op = ctypes.windll.user32
 
 def switch_combo(index, idCombo, hCombo):
     op.SendMessageW(hCombo, MSG['CB_SETCURSEL'], index, 0)

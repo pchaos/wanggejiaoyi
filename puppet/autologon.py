@@ -10,8 +10,11 @@ import os
 import subprocess
 import time
 import ctypes
+import platform
 
-api = ctypes.windll.user32
+sysstr = platform.system()
+if (sysstr == "Windows"):
+    api = ctypes.windll.user32
 
 def autologon(target=None):
     " 自动登录同花顺独立交易客户端 "
@@ -28,8 +31,8 @@ def autologon(target=None):
         if main and not api.IsWindowVisible(main):
             popup = api.GetLastActivePopup(main)
             if api.IsWindowVisible(popup):
-            print("找到交易端登录窗口!")
-            break
+                print("找到交易端登录窗口!")
+                break
         else:
             print("重试:{0}".format(i))
 

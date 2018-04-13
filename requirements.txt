@@ -1,3 +1,6 @@
 Django
 django-admin
-rest_django__framework
+djangorestframework
+django-filter
+tushare
+pandas
