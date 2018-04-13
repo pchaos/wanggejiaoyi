@@ -55,8 +55,8 @@ def getsignaldb(today):
     :return: 返回信号数据库名
     """
     filename = "trial_{0}.db".format(today)
-    fullname=os.path.join(untils.getcurrentdir(), filename)
-    if not os.path(fullname).is_file():
+    fullname=os.path.join(tools.pwd(), filename)
+    if not os.path.isfile(fullname):
         fullname=os.path.join(untils.getTempdir(), filename)
     return fullname
 
