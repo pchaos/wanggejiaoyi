@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Author: 久久为功
+Author: 久久为功 ， chaos
+
 Date: 2017-11-19
 Support multil-thread for different accounts
+
+modified：
+    2018 04 10  18：06：42 CST
+    重构getsignal；首先再当前目录查找数据库，如果没有找到，则返回系统临时目录+数据库名
 
 """
 import datetime
