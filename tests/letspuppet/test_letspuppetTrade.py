@@ -19,7 +19,7 @@ from unittest import TestCase
 
 import os
 import json
-from tools import tools
+from tools import *
 from letspuppet import *
 
 __author__ = 'pchaos'
@@ -92,6 +92,14 @@ class TestletspuppetTrade(TestCase):
         accountfilename = 'accounts.json.example'
         with open(accountfilename) as f:
             accounts = json.load(f)
+            print("accounts:{}\n".format(accounts))
         for k,v in accounts.items():
             print("account name: {}".format(k))
             print("account : {}".format(v))
+            print("account type: {}".format(type(v)))
+
+        # 测试loadjson(accountfilename)返回值和上面的方法返回值相同
+        accountfilename = 'accounts.json.example'
+        accounts2 = loadjson(accountfilename)
+        self.assertEqual(accounts, accounts2, "differ: {} \n{}".format(accounts,accounts2))
+

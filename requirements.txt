@@ -4,3 +4,4 @@ djangorestframework
 django-filter
 tushare
 pandas
+json
