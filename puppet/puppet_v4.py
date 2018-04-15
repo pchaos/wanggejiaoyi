@@ -4,7 +4,7 @@
 """
 __author__ = "睿瞳深邃(https://github.com/Raytone-D)"
 __project__ = 'Puppet'
-__version__ = "0.4.32"
+__version__ = "0.4.33"
 __license__ = 'MIT'
 
 # coding: utf-8
@@ -16,7 +16,7 @@ import platform
 
 try:
     import pyperclip
-except ImportError as e:
+except Exception as e:
     print("{}\n请先在命令行下运行：pip install pyperclip，再使用puppet！".format(e))
 
 MSG = {'WM_SETTEXT': 12,
