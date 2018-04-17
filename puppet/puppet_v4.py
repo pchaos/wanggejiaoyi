@@ -109,7 +109,7 @@ class Puppet:
     # 属性 # '帐号': account, '可用余额': balance, '持仓': position, '成交': deals, '可撤委托': cancelable, 
     #      # '新股': new, '中签': bingo, 
     """
-    def __init__(self, main=None, title='网上股票交易系统5.0'):
+    def r__init__(self, main=None, title='网上股票交易系统5.0'):
 
         print('木偶: 欢迎使用Puppet TraderApi, version {}'.format(__version__))
         print('{}\nPython version: {}'.format(platform.platform(), platform.python_version()))
@@ -272,6 +272,10 @@ class Puppet:
     
     @property
     def entrustment(self):
+        """
+        委托
+        :return:
+        """
         if not self._entrustment:
             self.switch(NODE['ENTRUSTMENT'])
             self._entrustment = reduce(op.GetDlgItem, NODE['FORM'], self._main)
@@ -356,7 +360,7 @@ if __name__ == '__main__':
         print(trader.new)               # 查当天新股名单
         #trader.raffle()                # 打新，skip=True, 跳过创业板不打。
         #print(trader.balance)           # 可用余额
-        #print(trader.position)          # 实时持仓
+        print(trader.position)          # 实时持仓
         #print(trader.deals)             # 当天成交
         #print(trader.cancelable)        # 可撤委托
         print(trader.market_value)
@@ -365,6 +369,6 @@ if __name__ == '__main__':
         #trader.cancel_all()
         #trader.cancel_buy()
         trader.cancel_sell()
-        limit = '510160', '0.557', '100'
+        limit = '510160', '0.557', '1000'
         trader.buy(*limit)
         trader.cancel_order('000001', 'cancel')

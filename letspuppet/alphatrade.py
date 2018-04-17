@@ -102,6 +102,9 @@ class AlphaTrade(threading.Thread):
             self.position = p
 
     def getentrust(self):
+        """获取委托状态
+            返回结果去除notpending对应的状态
+        """
         e = self.puppetTrade.entrustment
         e = pd.DataFrame(list(e))
         notpending = ['已成', '已撤', '废单']
@@ -180,7 +183,7 @@ class AlphaTrade(threading.Thread):
         today = gettoday()
         # todo 交易日判断，加上上证指数判断，可以判断节假日
         if not (now <= marketEnd and getweekday() < 5):
-            print('logout 1 done')
+            print('logout 1 done\n非交易时间。')
             self.logout()
             return 1
         roundcnt = 0
@@ -227,6 +230,7 @@ class AlphaTrade(threading.Thread):
         for i in range(self.signaldf.shape[0]):
             if i > 0 and self.signaldf.ix[i, 'code'] == self.signaldf.ix[i - 1, 'code'] and self.signaldf.ix[
                 i, 'trade'] == self.signaldf.ix[i - 1, 'trade']:
+                # 交易信号和上一条code及trade相同, 则忽略
                 continue
             # logging.info(self.signaldf.ix[i])
             if self.signaldf.ix[i, 'trade'] == 'bid':  # buy
@@ -282,7 +286,7 @@ class AlphaTrade(threading.Thread):
             time.sleep(0.2)
 
     def __loopentrust(self):
-        for j in range(self.entrust.shape[0]):
+        for j in range(self.entassetsrust.shape[0]):
             if self.entrust.ix[j, 'operation'] == 'sell':
                 opr = 'ask'
             elif self.entrust.ix[j, 'operation'] == 'buy':
