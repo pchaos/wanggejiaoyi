@@ -15,23 +15,31 @@ Change Activity:
 @Contact : p19992003#gmail.com                   
 -------------------------------------------------
 """
+
 __author__ = 'pchaos'
-import  os
+import os
 import autologin
 from tools import *
 
-def getclientname(clientname = 'ht_client'):
+CCLIENTNAME = 'ht_client'
+CFILENAME = 'ht_client.json.env'
+
+
+def getclientname(clientname=CCLIENTNAME):
     return clientname
 
-def getUserInfofromjson():
-    filename= os.path.join(pwd(),'ht_client.json.env')
-    if not os.path.isfile(filename):
-        cp(filename+'.example', filename)
-        assert 1==2, '先要配置文件:{}'.format(filename)
 
-    upc=loadjson(filename)
-    account, password, comm_password, exe_path =upc['user'],upc['password'], upc['comm_password'], upc['exe_path']
+def getUserInfofromjson(jsonFilename=CFILENAME):
+    filename = os.path.join(pwd(), jsonFilename)
+    if not os.path.isfile(filename):
+        if os.path.isfile(filename + '.example'):
+            cp(filename + '.example', filename)
+        assert 1 == 2, '先要配置文件:{}'.format(filename)
+
+    upc = loadjson(filename)
+    account, password, comm_password, exe_path = upc['user'], upc['password'], upc['comm_password'], upc['exe_path']
     return account, password, comm_password, exe_path
+
 
 def getUserInfo():
     # 获取环境变量值
@@ -41,17 +49,31 @@ def getUserInfo():
     comm_password = os.environ.get('HT_comm_password') or defaultinfo
     if account == defaultinfo or password == defaultinfo or comm_password == defaultinfo:
         # 环境变量没有设置，则从文件中获取
-        account, password, comm_password , exe_path= getUserInfofromjson()
+        account, password, comm_password, exe_path = getUserInfofromjson()
     return account, password, comm_password, exe_path
+
 
 def login(account, password, exe_path, comm_password):
     user = autologin.use(getclientname())
     user.prepare(
         user=account,
         password=password,
-        exe_path = exe_path,
+        exe_path=exe_path,
         comm_password=comm_password)
 
+
 if __name__ == '__main__':
-    account, password, comm_password, exe_path = getUserInfo()
+    import optparse
+    # 命令行参数 filename,通过配置文件改变登录参数
+    parser = optparse.OptionParser()
+
+    parser.add_option('-f', '--fileName',
+                      action="store", dest="filename",
+                      help="file name", default=CFILENAME)
+
+    options, args = parser.parse_args()
+
+    print('Query string:', options.filename)
+    jsonfile = options.filename
+    account, password, comm_password, exe_path = getUserInfo(jsonfile)
     login(account, password, exe_path, comm_password)
