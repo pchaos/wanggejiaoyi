@@ -3,5 +3,7 @@ django-admin
 djangorestframework
 django-filter
 tushare
-pandas
+pandas>=0.20.0
 json
+urllib3
+requests
