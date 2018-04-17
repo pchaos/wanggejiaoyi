@@ -44,11 +44,12 @@ def getUserInfo():
         account, password, comm_password , exe_path= getUserInfofromjson()
     return account, password, comm_password, exe_path
 
-def login(account, password, comm_password):
+def login(account, password, exe_path, comm_password):
     user = autologin.use(getclientname())
     user.prepare(
         user=account,
         password=password,
+        exe_path = exe_path,
         comm_password=comm_password)
 
 if __name__ == '__main__':
