@@ -28,3 +28,10 @@ class TestAuotologin(TestCase):
         self.assertIsNotNone(password, "password is None")
         self.assertIsNotNone(comm_password, "account is None")
         print(account, password, comm_password, exe_path)
+
+    def test_getUserInfo(self):
+        account, password, comm_password, exe_path = getUserInfo()
+        self.assertIsNotNone(account, "account is None")
+        self.assertIsNotNone(password, "password is None")
+        self.assertIsNotNone(comm_password, "account is None")
+        print(account, password, comm_password, exe_path)

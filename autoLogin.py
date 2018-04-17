@@ -41,8 +41,8 @@ def getUserInfo():
     comm_password = os.environ.get('HT_comm_password') or defaultinfo
     if account == defaultinfo or password == defaultinfo or comm_password == defaultinfo:
         # 环境变量没有设置，则从文件中获取
-        account, password, comm_password = getUserInfofromjson()
-    return account, password, comm_password
+        account, password, comm_password , exe_path= getUserInfofromjson()
+    return account, password, comm_password, exe_path
 
 def login(account, password, comm_password):
     user = autologin.use(getclientname())

@@ -80,6 +80,7 @@ class TestletspuppetTrade(TestCase):
             signaldf = getsignal(theday,999999999)
             print('signal: {}'.format(signaldf))
             if signaldf.shape[0] > 0:
+                print('signal shape[0]: {}'.format(signaldf.shape[0]))
                 print('signal index: {}'.format(signaldf.index)) # 此index和下面的index不同
                 # signaldf = signaldf[signaldf['index'].isin(account[4])]
                 signaldf = signaldf[signaldf['index'].isin(['mf'])]
