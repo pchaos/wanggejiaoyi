@@ -37,7 +37,7 @@ NODE = {'FRAME': (59648, 59649),
         'ACCOUNT': (59392, 0, 1711),
         'COMBO': (59392, 0, 2322),
         'BUY': (1032, 1033, 1034, '买入[B]', 1036, 1018),
-        'SELL':(1032, 1033, 1034, '卖出[S]', 1036, 1038),
+        'SELL': (1032, 1033, 1034, '卖出[S]', 1036, 1038),
         'CANCEL': (3348, '查询代码', '撤单'),
         'ENTRUSTMENT': 168,
         '撤单': 163,
@@ -64,7 +64,7 @@ NEW = {'新股代码': 1032,
        '申购数量': 1034,
        '申购': 1006}
 
-RAFFLE = ['新股代码', '证券代码', '申购价格']# , '申购上限']
+RAFFLE = ['新股代码', '证券代码', '申购价格']  # , '申购上限']
 
 VKCODE = {'F1': 112,
           'F2': 113,
@@ -78,17 +78,21 @@ sysstr = platform.system()
 if (sysstr == "Windows"):
     op = ctypes.windll.user32
 
+
 def switch_combo(index, idCombo, hCombo):
     op.SendMessageW(hCombo, MSG['CB_SETCURSEL'], index, 0)
-    op.SendMessageW(op.GetParent(hCombo), MSG['WM_COMMAND'], MSG['CBN_SELCHANGE']<<16|idCombo, hCombo)
+    op.SendMessageW(op.GetParent(hCombo), MSG['WM_COMMAND'], MSG['CBN_SELCHANGE'] << 16 | idCombo, hCombo)
+
 
 def click_button(dialog, label):
     handle = op.FindWindowExW(dialog, 0, 0, label)
     id_btn = op.GetDlgCtrlID(handle)
     op.PostMessageW(dialog, MSG['WM_COMMAND'], id_btn, 0)
 
+
 def fill_in(container, _id_item, _str):
     op.SendDlgItemMessageW(container, _id_item, MSG['WM_SETTEXT'], 0, _str)
+
 
 def kill_popup(hDlg, name='是(&Y)'):
     for x in range(100):
@@ -109,7 +113,8 @@ class Puppet:
     # 属性 # '帐号': account, '可用余额': balance, '持仓': position, '成交': deals, '可撤委托': cancelable, 
     #      # '新股': new, '中签': bingo, 
     """
-    def r__init__(self, main=None, title='网上股票交易系统5.0'):
+
+    def __init__(self, main=None, title='网上股票交易系统5.0'):
 
         print('木偶: 欢迎使用Puppet TraderApi, version {}'.format(__version__))
         print('{}\nPython version: {}'.format(platform.platform(), platform.python_version()))
@@ -128,22 +133,22 @@ class Puppet:
         self.members = {k: op.GetDlgItem(self.two_way, v) for k, v in TWO_WAY.items()}
         self._position = reduce(op.GetDlgItem, NODE['FORM'], self._main)
         if not self._main:
-              print("木偶：客户交易端没登录，我先撤了！")
-              sys.exit('木偶：错误的标题字符串"{}"！'.format(title))
+            print("木偶：客户交易端没登录，我先撤了！")
+            sys.exit('木偶：错误的标题字符串"{}"！'.format(title))
         # 获取登录账号
         self.account = reduce(op.GetDlgItem, NODE['ACCOUNT'], self._main)
         op.SendMessageW(self.account, MSG['WM_GETTEXT'], 32, self.buff)
         self.account = self.buff.value
 
-        #self.combo = reduce(op.GetDlgItem, NODE['COMBO'], self._main)
-        #self.count = op.SendMessageW(self.combo, MSG['CB_GETCOUNT'])
+        # self.combo = reduce(op.GetDlgItem, NODE['COMBO'], self._main)
+        # self.count = op.SendMessageW(self.combo, MSG['CB_GETCOUNT'])
 
     def _get_item(self, _id, sec=0.5):
         self.switch(_id)
         time.sleep(sec)
         return reduce(op.GetDlgItem, NODE['FRAME'], self._main)
 
-    def switch_tab(self, hCtrl, keyCode, param=0):   # 单击
+    def switch_tab(self, hCtrl, keyCode, param=0):  # 单击
         op.PostMessageW(hCtrl, MSG['WM_KEYDOWN'], keyCode, param)
         time.sleep(0.1)
         op.PostMessageW(hCtrl, MSG['WM_KEYUP'], keyCode, param)
@@ -179,7 +184,7 @@ class Puppet:
                 break
 
     def _order(self, container, id_items, *triple):
-        #self.switch(NODE['BUY'][0]
+        # self.switch(NODE['BUY'][0])
         fill_in(container, id_items[0], triple[0])  # 证券代码
         self._wait(container, id_items[-2])  # 证券名称
         fill_in(container, id_items[1], triple[1])  # 价格
@@ -190,35 +195,40 @@ class Puppet:
             kill_popup(self._main)
 
     def buy(self, symbol, price, qty):
+        # self.switch(NODE['BUY'][0])
         self._order(self._container['买入'], NODE['BUY'], symbol, price, qty)
 
     def sell(self, symbol, price, qty):
-        #self.switch(NODE['SELL'][0])
+        # self.switch(NODE['SELL'][0])
         self._order(self._container['卖出'], NODE['SELL'], symbol, price, qty)
 
-    def buy2(self, symbol, price, qty, sec=0.3):   # 买入(B)
-        #self.switch(NODE['双向委托'])
+    def buy2(self, symbol, price, qty, sec=0.3):  # 买入(B)
+        self.switch(NODE['双向委托'])
         op.SendMessageW(self.members['买入代码'], MSG['WM_SETTEXT'], 0, str(symbol))
         time.sleep(0.1)
         op.SendMessageW(self.members['买入价格'], MSG['WM_SETTEXT'], 0, str(price))
         time.sleep(0.1)
         op.SendMessageW(self.members['买入数量'], MSG['WM_SETTEXT'], 0, str(qty))
-        #op.SendMessageW(self.members['买入'], MSG['BM_CLICK'], 0, 0)
+        # op.SendMessageW(self.members['买入'], MSG['BM_CLICK'], 0, 0)
         time.sleep(sec)
         op.PostMessageW(self.two_way, MSG['WM_COMMAND'], TWO_WAY['买入'], 0)
-    
-    def sell2(self, symbol, price, qty, sec=0.3):    # 卖出(S)
-        #self.switch(NODE['双向委托'])
+        if len(price.split('.')[1]) == 3: # 基金三位小数价格弹窗
+            kill_popup(self._main)
+
+    def sell2(self, symbol, price, qty, sec=0.3):  # 卖出(S)
+        self.switch(NODE['双向委托'])
         op.SendMessageW(self.members['卖出代码'], MSG['WM_SETTEXT'], 0, str(symbol))
         time.sleep(0.1)
         op.SendMessageW(self.members['卖出价格'], MSG['WM_SETTEXT'], 0, str(price))
         time.sleep(0.1)
         op.SendMessageW(self.members['卖出数量'], MSG['WM_SETTEXT'], 0, str(qty))
-        #op.SendMessageW(self.members['卖出'], MSG['BM_CLICK'], 0, 0)
+        # op.SendMessageW(self.members['卖出'], MSG['BM_CLICK'], 0, 0)
         time.sleep(sec)
         op.PostMessageW(self.two_way, MSG['WM_COMMAND'], TWO_WAY['卖出'], 0)
+        if len(price.split('.')[1]) == 3: # 基金三位小数价格弹窗
+            kill_popup(self._main)
 
-    def refresh(self):    # 刷新(F5)
+    def refresh(self):  # 刷新(F5)
         op.PostMessageW(self.two_way, MSG['WM_COMMAND'], TWO_WAY['刷新'], 0)
 
     def cancel(self, symbol=None, choice='buy'):
@@ -226,7 +236,7 @@ class Puppet:
         time.sleep(3)
         cases = {'buy': 'cancel_buy', 'sell': 'cancel_sell'}
         self.cancel_order(cases.get(choice))
-    
+
     def cancel_order(self, symbol=None, choice='cancel_all', symbolid=3348, nMarket=None, orderId=None):
         """撤销订单，choice选择操作的结果，默认“cancel_all”，可选“cancel_buy”、“cancel_sell”或"cancel"
             "cancel"是撤销指定股票symbol的全部委托。
@@ -249,7 +259,7 @@ class Puppet:
             'cancel': '撤单'
         }
         click_button(hDlg, cases.get(choice))
-    
+
     @property
     def balance(self):
         self.switch(NODE['双向委托'])
@@ -269,7 +279,7 @@ class Puppet:
     @property
     def deals(self):
         return self.copy_data(self._position, ord('E'))
-    
+
     @property
     def entrustment(self):
         """
@@ -288,8 +298,8 @@ class Puppet:
             self.switch(NODE['撤单'])
             self._cancelable = reduce(op.GetDlgItem, NODE['FORM'], self._main)
         return self.copy_data(self._cancelable)
-        #ret = self.entrustment
-        #return [pair for pair in ret if '已报' in pair['备注']] if ret else ret
+        # ret = self.entrustment
+        # return [pair for pair in ret if '已报' in pair['备注']] if ret else ret
 
     @property
     def new(self):
@@ -305,32 +315,32 @@ class Puppet:
         self._bingo = reduce(op.GetDlgItem, NODE['FORM'], self._main)
         return self.copy_data(self._bingo)
 
-    def cancel_all(self):    # 全撤(Z)  # 只有撤单窗的按钮才能做到无弹窗撤单
+    def cancel_all(self):  # 全撤(Z)  # 只有撤单窗的按钮才能做到无弹窗撤单
         print("请用trader.cancel_order('cancel_all') 取代trader.cancel_all()")
         click_button(self._container['撤单'], '全撤(Z /)')
 
-    def cancel_buy(self):    # 撤买(X)
+    def cancel_buy(self):  # 撤买(X)
         print("请用trader.cancel_order('cancel_buy') 取代trader.cancel_buy()")
         click_button(self._container['撤单'], '撤买(X)')
 
-    def cancel_sell(self):    # 撤卖(C)
+    def cancel_sell(self):  # 撤卖(C)
         print("请用trader.cancel_order('cancel_sell') 取代trader.cancel_sell()")
         click_button(self._container['撤单'], '撤卖(C)')
 
-    def raffle(self, skip=False):    # 打新
-        #op.SendMessageW(self._main, MSG['WM_COMMAND'], NODE['新股申购'], 0)
-        #self._raffle = reduce(op.GetDlgItem, NODE['FORM'], self._main)
-        #close_pop()    # 弹窗无需关闭，不影响交易。
-        #schedule = self.copy_data(self._raffle)
+    def raffle(self, skip=False):  # 打新
+        # op.SendMessageW(self._main, MSG['WM_COMMAND'], NODE['新股申购'], 0)
+        # self._raffle = reduce(op.GetDlgItem, NODE['FORM'], self._main)
+        # close_pop()    # 弹窗无需关闭，不影响交易。
+        # schedule = self.copy_data(self._raffle)
         ret = self.new
         if not ret:
             print("是日无新!")
             return ret
         self._raffle = reduce(op.GetDlgItem, NODE['FRAME'], self._main)
         self._raffle_parts = {k: op.GetDlgItem(self._raffle, v) for k, v in NEW.items()}
-            #new = [x.split() for x in schedule.splitlines()]
-            #index = [new[0].index(x) for x in RAFFLE if x in new[0]]    # 索引映射：代码0, 价格1, 数量2
-            #new = map(lambda x: [x[y] for y in index], new[1:])
+        # new = [x.split() for x in schedule.splitlines()]
+        # index = [new[0].index(x) for x in RAFFLE if x in new[0]]    # 索引映射：代码0, 价格1, 数量2
+        # new = map(lambda x: [x[y] for y in index], new[1:])
         for new in ret:
             symbol, price = [new[y] for y in RAFFLE if y in new.keys()]
             if symbol[0] == '3' and skip:
@@ -348,27 +358,37 @@ class Puppet:
             time.sleep(0.3)
             op.PostMessageW(self._raffle, MSG['WM_COMMAND'], NEW['申购'], 0)
 
-        #op.SendMessageW(self._main, MSG['WM_COMMAND'], NODE['双向委托'], 0)    # 切换到交易操作台
+        # op.SendMessageW(self._main, MSG['WM_COMMAND'], NODE['双向委托'], 0)    # 切换到交易操作台
         return [new for new in self.cancelable if '配售申购' in new['操作']]
 
+
 if __name__ == '__main__':
- 
+
     trader = Puppet()
-    #trader = Puppet(title='广发证券核新网上交易系统7.60')
+    # trader = Puppet(title='广发证券核新网上交易系统7.60')
     if trader.account:
-        print(trader.account)           # 帐号
-        print(trader.new)               # 查当天新股名单
-        #trader.raffle()                # 打新，skip=True, 跳过创业板不打。
-        #print(trader.balance)           # 可用余额
-        print(trader.position)          # 实时持仓
-        #print(trader.deals)             # 当天成交
-        #print(trader.cancelable)        # 可撤委托
+        print(trader.account)  # 帐号
+        print(trader.new)  # 查当天新股名单
+        # trader.raffle()                # 打新，skip=True, 跳过创业板不打。
+        # print(trader.balance)           # 可用余额
+        print(trader.position)  # 实时持仓
+        # print(trader.deals)             # 当天成交
+        # print(trader.cancelable)        # 可撤委托
         print(trader.market_value)
-        print(trader.entrustment)        # 当日委托（可撤委托，已成委托，已撤销委托）
-        #print(trader.bingo)             # 注意只兼容部分券商！
-        #trader.cancel_all()
-        #trader.cancel_buy()
-        trader.cancel_sell()
-        limit = '510160', '0.557', '1000'
-        trader.buy(*limit)
-        trader.cancel_order('000001', 'cancel')
+        print(trader.entrustment)  # 当日委托（可撤委托，已成委托，已撤销委托）
+        # print(trader.bingo)             # 注意只兼容部分券商！
+        # trader.cancel_all()
+        # trader.cancel_buy()
+        # trader.cancel_sell()
+        # limit = '510160', '0.557', '1000'
+        # trader.buy(*limit)
+        # trader.cancel_order('000001', 'cancel')
+        # trader.cancel_order(stcode, 'cancel_buy')
+        stcode = '150153'
+        limit = stcode, '0.644', '5400'
+        trader.buy2(*limit)
+        limit = stcode, '0.678', '1700'
+        trader.sell2(*limit)
+
+        limit = stcode, '0.659', '1600'
+        # trader.sell2(*limit)
