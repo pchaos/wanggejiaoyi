@@ -21,9 +21,10 @@ __author__ = 'pchaos'
 
 import pywinauto
 import pywinauto.clipboard
+import time
+import platform
 
 from .clienttrader import ClientTrader
-
 
 class HTClientTrader(ClientTrader):
     @property
@@ -44,7 +45,7 @@ class HTClientTrader(ClientTrader):
 
         try:
             self._app = pywinauto.Application().connect(
-                path=self._run_exe_path(exe_path), timeout=1)
+                path=self._run_exe_path(exe_path), timeout=2)
         except Exception:
             self._app = pywinauto.Application().start(exe_path)
 
@@ -56,11 +57,24 @@ class HTClientTrader(ClientTrader):
                 except RuntimeError:
                     pass
 
-            self._app.top_window().Edit1.type_keys(user)
+            time.sleep(1)
+            if  platform.release() == 'XP':
+                # windows xp系统输入需要延迟等待. xp系统放弃，无法保证输入正确
+                delaysec= 1
+            else:
+                delaysec = 0.05
+            self._app.top_window().Edit1.Click()
+            if (self._app.top_window().Button4.GetCheckState() == 0 or
+                len(self._app.top_window().Edit1.WindowText()) < 8):
+                # 如果有勾选保存账号则跳过输入账号
+                self._app.top_window().Edit1.type_keys(user)
+                time.sleep(delaysec)
+            self._app.top_window().Edit2.Click()
             self._app.top_window().Edit2.type_keys(password)
-
+            time.sleep(delaysec)
+            self._app.top_window().Edit1.Click()
             self._app.top_window().Edit3.type_keys(comm_password)
-
+            time.sleep(delaysec)
             self._app.top_window().button0.click()
 
             # detect login is success or not
