@@ -41,15 +41,18 @@ def getUserInfofromjson(jsonFilename=CFILENAME):
     return account, password, comm_password, exe_path
 
 
-def getUserInfo():
-    # 获取环境变量值
-    defaultinfo = 'None'
-    account = os.environ.get('HT_ACCOUNT') or defaultinfo
-    password = os.environ.get('HT_password') or defaultinfo
-    comm_password = os.environ.get('HT_comm_password') or defaultinfo
-    if account == defaultinfo or password == defaultinfo or comm_password == defaultinfo:
-        # 环境变量没有设置，则从文件中获取
-        account, password, comm_password, exe_path = getUserInfofromjson()
+def getUserInfo(jsonFilename=None):
+    if jsonFilename is None:
+        # 获取环境变量值
+        defaultinfo = 'None'
+        account = os.environ.get('HT_ACCOUNT') or defaultinfo
+        password = os.environ.get('HT_password') or defaultinfo
+        comm_password = os.environ.get('HT_comm_password') or defaultinfo
+        if account == defaultinfo or password == defaultinfo or comm_password == defaultinfo:
+            # 环境变量没有设置，则从文件中获取
+            account, password, comm_password, exe_path = getUserInfofromjson()
+    else:
+        account, password, comm_password, exe_path = getUserInfofromjson(jsonFilename)
     return account, password, comm_password, exe_path
 
 
