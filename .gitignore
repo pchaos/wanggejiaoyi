@@ -82,6 +82,7 @@ celerybeat-schedule
 # dotenv
 .env
 ht_client.json.env
+ht_client_yg.json.env
 notes.txt.env
 
 # virtualenv
