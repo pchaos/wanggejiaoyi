@@ -31,8 +31,8 @@ def getclientname(clientname=CCLIENTNAME):
 
 def getUserInfofromjson(jsonFilename=CFILENAME):
     filename = os.path.join(pwd(), jsonFilename)
-    if not os.path.isfile(filename):
-        if os.path.isfile(filename + '.example'):
+    if not os.path.isdir(filename):
+        if os.path.isdir(filename + '.example'):
             cp(filename + '.example', filename)
         assert 1 == 2, '先要配置文件:{}'.format(filename)
 
@@ -57,7 +57,7 @@ def getUserInfo(jsonFilename=None):
 
 
 def login(account, password, exe_path, comm_password):
-    assert os.path.isfile(exe_path), "没有找到交易软件：{}".format(exe_path)
+    assert os.path.isdir(exe_path), "没有找到交易软件：{}".format(exe_path)
     user = autologin.use(getclientname())
     user.prepare(
         user=account,
