@@ -57,6 +57,7 @@ def getUserInfo(jsonFilename=None):
 
 
 def login(account, password, exe_path, comm_password):
+    assert os.path.isfile(exe_path), "没有找到交易软件：{}".format(exe_path)
     user = autologin.use(getclientname())
     user.prepare(
         user=account,
